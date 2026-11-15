@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Node host for the EAC gateway — the self-hosted form of worker/worker.js
- * (宝塔/PM2/systemd 都跑这个文件；Cloudflare 部署则直接用 worker.js)。
+ * (BT/PM2/systemd all run this file; Cloudflare deployment uses worker.js directly).
  *
  * The validation core is the SAME module Cloudflare runs: this shim only
  * adapts Node's HTTP server to the Web `fetch(request, env, ctx)` contract,
@@ -283,11 +283,11 @@ export function resetAnalytics() { analytics.reset() }
 export const poolProbe = { fetchImpl: null }
 
 const DASHBOARD_HTML = () => {
-  try { return fs.readFileSync(path.join(here, 'dashboard.html'), 'utf8') } catch { return '<!doctype html><meta charset="utf-8"><title>EAC 网关</title><p>dashboard.html 缺失。</p>' }
+  try { return fs.readFileSync(path.join(here, 'dashboard.html'), 'utf8') } catch { return '<!doctype html><meta charset="utf-8"><title>EAC Gateway</title><p>dashboard.html missing.</p>' }
 }
 
 const ENTRY_JS = () => {
-  try { return fs.readFileSync(path.join(here, 'entry.js'), 'utf8') } catch { return '/* entry.js 缺失 */' }
+  try { return fs.readFileSync(path.join(here, 'entry.js'), 'utf8') } catch { return '/* entry.js missing */' }
 }
 
 /**
@@ -546,8 +546,8 @@ export function createGatewayServer(hostEnv = {}, options = {}) {
           if (verdict.ok !== true) {
             analytics.record({ hash: ipHash, chat: true, status: 401, tokensIn: 0, tokensOut: 0, model, rejected: true })
             const message = verdict.reason === 'unstarred'
-              ? `GitHub 授权无效：请先 star ${auth.stats().repo}，再在插件设置页重新登录（${verdict.detail ?? 'star removed'}）`
-              : '需要 GitHub 授权：请在插件设置页用 GitHub 登录，并 star 仓库后使用 EAC 模型'
+              ? `GitHub auth invalid: please star ${auth.stats().repo} first, then re-login in plugin settings (${verdict.detail ?? 'star removed'})`
+              : 'GitHub auth required: please log in with GitHub in plugin settings and star the repo to use EAC models'
             return json(res, 401, { error: { message, type: 'AuthorizationRequired', reason: verdict.reason ?? 'missing' } })
           }
           if (typeof verdict.githubId === 'string' && verdict.githubId !== '') {
