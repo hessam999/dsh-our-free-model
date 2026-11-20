@@ -5,8 +5,8 @@
   "identifier": "com.ourfreemodel.desktop",
   "build": {
     "frontendDist": "../splash",
-    "beforeBuildCommand": "node ../../scripts/prepare-desktop.mjs",
-    "beforeDevCommand": "node ../../scripts/prepare-desktop.mjs"
+    "beforeBuildCommand": "cd ../.. && node scripts/build-standalone-ui.mjs && node scripts/prepare-desktop.mjs",
+    "beforeDevCommand": "cd ../.. && node scripts/build-standalone-ui.mjs && node scripts/prepare-desktop.mjs"
   },
   "app": {
     "windows": [],
