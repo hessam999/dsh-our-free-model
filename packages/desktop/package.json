@@ -3,8 +3,8 @@
   "version": "2.8.5",
   "description": "Our Free Model 独立服务的 Windows 桌面壳",
   "scripts": {
-    "dev": "tauri dev",
-    "build": "tauri build",
+    "dev": "npx tauri dev",
+    "build": "npx tauri build",
     "prepare": "node ../../scripts/prepare-desktop.mjs",
     "test": "node ../../scripts/desktop-test.mjs"
   },
