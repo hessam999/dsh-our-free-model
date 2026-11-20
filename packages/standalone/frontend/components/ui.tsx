@@ -3,15 +3,15 @@ import { Slot } from '@radix-ui/react-slot'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
-// 按 shadcn 的源码维护方式组合基础组件，只引入本阶段需要的原语。
+// Assemble base components in shadcn source style, importing only primitives needed at this stage.
 export const cn = (...values: ClassValue[]) => twMerge(clsx(values))
 
 type ButtonVariant = 'default' | 'outline' | 'ghost'
 type ButtonSize = 'sm' | 'md' | 'lg' | 'icon'
 
 /**
- * 按钮。`asChild` 时渲染为 Slot（Radix），把样式挂到调用方给的子元素上。
- * forwardRef 是必需的：动效 hook 要把 ref 挂到真实 DOM 上写 CSS 变量。
+ * Button. When `asChild`, renders as Slot (Radix), hanging styles on the caller-provided child element.
+ * forwardRef is required: motion hooks attach ref to the real DOM to write CSS variables.
  */
 export const Button = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: ButtonVariant; size?: ButtonSize; busy?: boolean; asChild?: boolean
@@ -40,12 +40,12 @@ export function Input({ className, invalid = false, ...props }:
   return <input aria-invalid={invalid || undefined} className={cn('ui-input', invalid && 'is-invalid', className)} {...props} />
 }
 
-/** 16px 旋转指示器，配合按钮 busy 态或独立使用；只动 transform。 */
+/** 16px rotation indicator, used with button busy state or standalone; animates only transform. */
 export function Spinner({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) {
-  return <span className={cn('ui-spinner', className)} role="status" aria-label="加载中" {...props} />
+  return <span className={cn('ui-spinner', className)} role="status" aria-label="Loading" {...props} />
 }
 
-/** 纯 CSS 提示：把文字放到 tip，悬停/聚焦可见。不引入定位依赖。 */
+/** Pure CSS tooltip: put text in tip, visible on hover/focus. No positioning dependency. */
 export function Tooltip({ className, tip, children, ...props }:
   React.HTMLAttributes<HTMLSpanElement> & { tip: string }) {
   return <span className={cn('ui-tooltip', className)} data-tip={tip} {...props}>{children}</span>
@@ -55,7 +55,7 @@ export function Kbd({ className, ...props }: React.HTMLAttributes<HTMLElement>) 
   return <kbd className={cn('ui-kbd', className)} {...props} />
 }
 
-/** 受控小开关：class 契约与既有 .ui-switch 完全一致（on 表示开启）。 */
+/** Controlled small switch: class contract identical to existing .ui-switch (on means on). */
 export function Switch({ className, checked = false, onCheckedChange, disabled, ...props }:
   Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> & { checked?: boolean; onCheckedChange?: (next: boolean) => void }) {
   return <button type="button" role="switch" aria-checked={checked} disabled={disabled}
