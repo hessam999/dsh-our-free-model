@@ -1,0 +1,13 @@
+{
+  "在应用内管理渠道、账号与模型；改动会同步进模型清单。": "Manage channels, accounts, and models inside the app; changes sync into the model catalog.",
+  "模型工作台（magpie）": "Model Workbench (magpie)",
+  "正在启动模型工作台…": "Starting Model Workbench…",
+  "模型工作台启动失败": "Failed to start Model Workbench",
+  "模型工作台未能启动": "Model Workbench failed to start",
+  "模型工作台操作": "Model Workbench actions",
+  "刷新失败，请重试": "Refresh failed, please retry",
+  "工作台设置": "Workbench settings",
+  "模型工作台": "Model Workbench",
+  "退出全屏": "Exit fullscreen",
+  "全屏": "Fullscreen"
+}

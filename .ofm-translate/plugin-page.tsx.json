@@ -1,0 +1,8 @@
+{
+  "页面请求失败（${response.status}）": "Page request failed (${response.status})",
+  "页面请求失败": "Page request failed",
+  "重新加载": "Reload",
+  "插件页面未能加载": "The plugin page failed to load",
+  "页面文件可能已被卸载或完整性校验失败。可以回到插件中心重新安装。": "The page file may have been uninstalled or failed its integrity check. Go back to the Plugin Center to reinstall it.",
+  "正在加载插件页面…": "Loading plugin page…"
+}

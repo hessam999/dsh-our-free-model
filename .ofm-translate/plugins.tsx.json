@@ -1,0 +1,19 @@
+{
+  "迁移助手：导出Installed清单（id、版本、Enable/Disable、Configuration；Secret永不导出）。": "Migration helper: exports the installed catalog (id, version, Enable/Disable, Configuration; secrets are never exported).",
+  "迁移助手：按清单逐个从签名市场重装并恢复Configuration；一个Failed不拖累其余。": "Migration helper: reinstalls each catalog entry from the signed marketplace in order and restores its Configuration; one failure does not block the rest.",
+  "Update All：逐个装，一个被拒绝不拖累其余 —— 与 DSH 控制台同一契约。": "Update All: installs one at a time, and a rejected plugin does not block the rest — the same contract as the DSH console.",
+  "已Update ": "Updated ",
+  "，${failed} 个Failed": ", ${failed} failed",
+  "查看 ${entry.author} 的其他Plugin": "See other plugins by ${entry.author}",
+  "Plugin中心": "Plugin Center",
+  "Provider、Enhancement与Page都走同一套签名清单、权限与沙箱；Built-in能力也在这里登记。": "Providers, Enhancements, and Pages all share the same signed manifest, permissions, and sandbox; Built-in capabilities are registered here too.",
+
+  "：": ": ",
+  "？": "? ",
+  "（${updateCandidates.length}）": "(${updateCandidates.length})",
+  "“Update All”": "\"Update All\"",
+  "“Update”": "\"Update\"",
+  "“Discover,”": "\"Discover,\"",
+  "“Unverified.”": "\"Unverified.\"",
+  "，${failed} failed": ", ${failed} failed"
+}

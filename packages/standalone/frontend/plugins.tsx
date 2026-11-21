@@ -96,7 +96,7 @@ function PluginCover({ id, kind }: { id: string; kind: string }) {
 /** One-line soak countdown hint: updates that are ready are described differently from updates still in the observation window. */
 function soakHint(update: PluginUpdate | undefined): string {
   if (update === undefined) return ''
-  if (update.ready) return 'The observation window has passed. Select “Update All” or an individual “Update” to install immediately.'
+  if (update.ready) return 'The observation window has passed. Select "Update All" or an individual "Update" to install immediately.'
   const hours = Math.max(1, Math.ceil(update.soakRemainingMs / 3_600_000))
   return `About ${hours} hours remain in the observation window (new releases are held for a period to reduce software supply-chain poisoning risk); you can also update manually now.`
 }
@@ -198,7 +198,7 @@ export function Plugins({ summary, host, active }: { summary: Summary; host: Hos
     setBusy(`self:${record.id}`)
     try {
       const result = await host.request<{ ok: boolean; message: string }>('/plugins/self-test', { id: record.id }, 60_000)
-      setNotice(result.ok ? `Self-test passed${result.message ? '：' + result.message : ''}` : `Self-test failed: ${result.message}`)
+      setNotice(result.ok ? `Self-test passed${result.message ? ': ' + result.message : ''}` : `Self-test failed: ${result.message}`)
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : 'Self-test failed')
     } finally {
@@ -254,7 +254,7 @@ export function Plugins({ summary, host, active }: { summary: Summary; host: Hos
     }
   }
 
-  /** 迁移助手：导出Installed清单（id、版本、Enable/Disable、Configuration；Secret永不导出）。 */
+  /** Migration helper: exports the installed catalog (id, version, Enable/Disable, Configuration; secrets are never exported). */
   const exportShelf = () => {
     const installedAll = data?.installed ?? []
     if (installedAll.length === 0) { setNotice('There are no plugins to export yet'); return }
@@ -279,7 +279,7 @@ export function Plugins({ summary, host, active }: { summary: Summary; host: Hos
     setNotice('Plugin catalog exported (JSON, secrets excluded)')
   }
 
-  /** 迁移助手：按清单逐个从签名市场重装并恢复Configuration；一个Failed不拖累其余。 */
+  /** Migration helper: reinstalls each catalog entry from the signed marketplace in order and restores its Configuration; one failure does not block the rest. */
   const importShelf = async (file: File) => {
     if (busy !== '') return
     let shelf: { plugins?: { id?: unknown; enabled?: unknown; config?: unknown }[] }
@@ -307,13 +307,13 @@ export function Plugins({ summary, host, active }: { summary: Summary; host: Hos
       }
       await load(true)
       await host.refresh()
-      setNotice(`Restored ${restored} plugins${failed > 0 ? `，${failed} failed (they may have been delisted or be incompatible)` : ''}`)
+      setNotice(`Restored ${restored} plugins${failed > 0 ? `, ${failed} failed (they may have been delisted or be incompatible)` : ''}`)
     } finally {
       setBusy('')
     }
   }
 
-  /** Update All：逐个装，一个被拒绝不拖累其余 —— 与 DSH 控制台同一契约。 */
+  /** Update All: installs one at a time, and a rejected plugin does not block the rest — the same contract as the DSH console. */
   const updateAll = async () => {
     if (busy !== '' || updateCandidates.length === 0) return
     setBusy('update-all')
@@ -332,7 +332,7 @@ export function Plugins({ summary, host, active }: { summary: Summary; host: Hos
         setUpdateProgress({ done, total: updateCandidates.length })
       }
       await load(true)
-      setNotice(`已Update ${updateCandidates.length - failed} plugins${failed > 0 ? `，${failed} 个Failed` : ''}`)
+      setNotice(`Updated ${updateCandidates.length - failed} plugins${failed > 0 ? `, ${failed} failed` : ''}`)
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : 'Update failed')
     } finally {
@@ -405,7 +405,7 @@ export function Plugins({ summary, host, active }: { summary: Summary; host: Hos
         {record.selfTestAvailable && <Button variant="ghost" onClick={() => { void selfTest(record) }} disabled={busy !== ''}>{busy === `self:${record.id}` ? 'Testing...' : 'Self-Test'}</Button>}
         {update?.updateAvailable && update.installable && <Button onClick={() => setInstallTarget(update)}>Update to v{update.version}</Button>}
       {update?.updateAvailable && <p className="plugin-soak">{(update.changelog ?? [])[0] ?? ''}{(update.changelog ?? []).length > 0 ? ' · ' : ''}{soakHint(updatesById.get(record.id))}</p>}
-        {!record.builtin && <Button variant="ghost" className="danger" onClick={() => { if (window.confirm(`Uninstall ${record.name}？Its configuration, secrets, and local storage will also be deleted.`)) void act('/plugins/uninstall', { id: record.id }, `uninstall:${record.id}`) }} disabled={busy !== ''}>
+        {!record.builtin && <Button variant="ghost" className="danger" onClick={() => { if (window.confirm(`Uninstall ${record.name}? Its configuration, secrets, and local storage will also be deleted.`)) void act('/plugins/uninstall', { id: record.id }, `uninstall:${record.id}`) }} disabled={busy !== ''}>
           <Trash2 size={14} />Uninstall
         </Button>}
       </div>
@@ -429,7 +429,7 @@ export function Plugins({ summary, host, active }: { summary: Summary; host: Hos
       <div className="plugin-meta">
         <span>{permissionsText(entry)}</span>
         {entry.pages.length > 0 && <span>{entry.pages.length} pages</span>}
-        {entry.author && <button type="button" className="plugin-meta-btn" title={`查看 ${entry.author} 的其他Plugin`} onClick={() => { setTab('discover'); setSearch(entry.author ?? '') }}>{entry.author}</button>}
+        {entry.author && <button type="button" className="plugin-meta-btn" title={`See other plugins by ${entry.author}`} onClick={() => { setTab('discover'); setSearch(entry.author ?? '') }}>{entry.author}</button>}
         {(entry.tags ?? []).slice(0, 3).map(tag => <button type="button" className="plugin-tag" key={tag} onClick={() => { setTab('discover'); setSearch(tag) }}>{tag}</button>)}
       </div>
       <div className="plugin-actions">
@@ -464,8 +464,8 @@ export function Plugins({ summary, host, active }: { summary: Summary; host: Hos
 
   return <section className="plugins-page" data-testid="plugins-page">
     <header className="plugins-header">
-      <div><span className="eyebrow">PLUGIN CENTER</span><h1>Plugin中心</h1>
-        <p>Provider、Enhancement与Page都走同一套签名清单、权限与沙箱；Built-in能力也在这里登记。</p></div>
+      <div><span className="eyebrow">PLUGIN CENTER</span><h1>Plugin Center</h1>
+        <p>Providers, Enhancements, and Pages all share the same signed manifest, permissions, and sandbox; Built-in capabilities are registered here too.</p></div>
       <div className="plugin-actions">
         <Button variant="ghost" onClick={() => void load()} disabled={busy !== ''}><RefreshCw size={14} />Refresh</Button>
         <Button variant="ghost" onClick={() => void refreshRegistry()} disabled={busy !== ''}>{busy === 'refresh' ? <Loader2 className="spin" size={14} /> : <RefreshCw size={14} />}Refresh Marketplace</Button>
@@ -476,7 +476,7 @@ export function Plugins({ summary, host, active }: { summary: Summary; host: Hos
         </label>
         <Button variant="ghost" onClick={exportShelf} disabled={busy !== ''} title="Export installed plugins and configuration (secrets excluded)"><Download size={14} />Export Catalog</Button>
         <Button onClick={() => void updateAll()} disabled={busy !== '' || updateProgress !== null || updateCandidates.length === 0} title={updateCandidates.length === 0 ? 'No plugins available for update' : undefined}>
-          {updateProgress !== null ? `Updating ${updateProgress.done}/${updateProgress.total}` : `Update All${updateCandidates.length > 0 ? `（${updateCandidates.length}）` : ''}`}
+          {updateProgress !== null ? `Updating ${updateProgress.done}/${updateProgress.total}` : `Update All${updateCandidates.length > 0 ? `(${updateCandidates.length})` : ''}`}
         </Button>
       </div>
       <div className="plugins-subrow">
@@ -511,7 +511,7 @@ export function Plugins({ summary, host, active }: { summary: Summary; host: Hos
     {data === undefined ? skeleton()
       : tab === 'installed' && <div className="plugin-grid">
         {installed.length === 0
-          ? <p className="plugin-empty">{filtersActive ? <>No matching plugins.<button className="text-button" onClick={clearFilters}>Clear Filters</button></> : 'No plugins are installed yet. Choose one from “Discover,” or install a local package below using Developer Mode.'}</p>
+          ? <p className="plugin-empty">{filtersActive ? <>No matching plugins.<button className="text-button" onClick={clearFilters}>Clear Filters</button></> : 'No plugins are installed yet. Choose one from "Discover," or install a local package below using Developer Mode.'}</p>
           : installed.map(renderInstalledCard)}
       </div>}
     {data !== undefined && tab === 'discover' && <div className="plugin-grid">
@@ -524,7 +524,7 @@ export function Plugins({ summary, host, active }: { summary: Summary; host: Hos
     </div>}
 
     <section className="plugin-developer">
-      <header><div><h2>Developer Mode</h2><p>Install unsigned plugin packages from a local directory for development and debugging. They still run in the same sandbox after installation, but are marked as “Unverified.”</p></div>
+      <header><div><h2>Developer Mode</h2><p>Install unsigned plugin packages from a local directory for development and debugging. They still run in the same sandbox after installation, but are marked as "Unverified."</p></div>
         <label className="plugin-switch"><input type="checkbox" checked={data?.settings.developerPlugins === true} onChange={() => void toggleDeveloper()} disabled={busy !== ''} /><span>Allow Local Unsigned Plugins</span></label>
       </header>
       {data?.settings.developerPlugins === true && <div className="plugin-developer-form">

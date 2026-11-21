@@ -1,0 +1,9 @@
+{
+  "[已隐藏]": "[hidden]",
+  "请求管理接口。\n *\n * `signOutOn401` 决定 401 是否要踢掉整个控制台会话。默认要（管理会话确实过期了），\n * 但反馈页的 401 是\"GitHub 登录失效\",不是\"管理会话失效\" —— 那种情况踢到登录页会\n * 让用户丢掉已经写好的反馈正文,而重连 GitHub 本来只需要在页面里点一下。": "Management request helper.\n *\n * `signOutOn401` decides whether a 401 should drop the whole console session. By default it does (the management session really did expire),\n * but a 401 from the feedback page means \"GitHub sign-in expired\", not \"management session expired\" — in that case kicking the user to the login page would\n * lose the feedback text they have already written, whereas reconnecting GitHub only takes one click on the page.",
+  "服务返回了无效响应": "Server returned an invalid response",
+  "// 状态码随错误一起抛出:调用方需要区分\"管理会话过期\"(401) 与普通失败。": "// The status code is thrown together with the error: callers need to tell an \"expired management session\" (401) apart from an ordinary failure.",
+  "请求失败": "Request failed",
+  "请求超时，请重试。": "Request timed out, please retry.",
+  "操作失败，请重试。": "Operation failed, please retry."
+}

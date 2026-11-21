@@ -102,10 +102,10 @@ export function PluginPage({ page, onNotice }: { page: PluginPageRecord; onNotic
           }),
         })
         const value = await response.json().catch(() => ({}))
-        if (!response.ok) throw new Error(String(value?.error ?? `页面请求失败（${response.status}）`))
+        if (!response.ok) throw new Error(String(value?.error ?? `Page request failed (${response.status})`))
         post({ __ofm: 1, type: 'rpc-reply', id, ok: true, result: value.result ?? null })
       } catch (reason) {
-        post({ __ofm: 1, type: 'rpc-reply', id, ok: false, error: reason instanceof Error ? reason.message : '页面请求失败' })
+        post({ __ofm: 1, type: 'rpc-reply', id, ok: false, error: reason instanceof Error ? reason.message : 'Page request failed' })
       }
     }
     window.addEventListener('message', onMessage)
@@ -122,13 +122,13 @@ export function PluginPage({ page, onNotice }: { page: PluginPageRecord; onNotic
     <header className="plugin-page-header">
       <div><span className="eyebrow">PLUGIN PAGE</span><h1>{page.title}</h1><p>{page.pluginId} · v{page.version}{page.description ? ` · ${page.description}` : ''}</p></div>
       <div className="plugin-actions">
-        <Button variant="ghost" onClick={() => { setState('loading'); setGeneration(current => current + 1) }}><RefreshCw size={14} />重新加载</Button>
+        <Button variant="ghost" onClick={() => { setState('loading'); setGeneration(current => current + 1) }}><RefreshCw size={14} />Reload</Button>
       </div>
     </header>
     {state === 'failed'
-      ? <div className="plugin-page-fallback" role="alert"><AlertCircle size={18} /><div><strong>插件页面未能加载</strong><p>页面文件可能已被卸载或完整性校验失败。可以回到插件中心重新安装。</p></div></div>
+      ? <div className="plugin-page-fallback" role="alert"><AlertCircle size={18} /><div><strong>The plugin page failed to load</strong><p>The page file may have been uninstalled or failed its integrity check. Go back to the Plugin Center to reinstall it.</p></div></div>
       : <div className="plugin-page-frame">
-        {state === 'loading' && <p className="plugin-page-loading" role="status"><Loader2 className="spin" size={16} />正在加载插件页面…</p>}
+        {state === 'loading' && <p className="plugin-page-loading" role="status"><Loader2 className="spin" size={16} />Loading plugin page…</p>}
         <iframe
           key={`${page.id}:${generation}`}
           ref={frame}
